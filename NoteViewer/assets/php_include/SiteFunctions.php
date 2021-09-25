@@ -185,6 +185,9 @@ class SiteFunctions{
     }
 
     public function deleteAccount(string $user_id): bool{
+        $query_delete_user_notes = $this->connection->class_connection->prepare("DELETE FROM NOTES WHERE USER_ID=:user_id");
+        $query_delete_user_notes_parms = ["user_id" => $user_id];
+        $query_delete_user_notes->execute($query_delete_user_notes_parms);
         $query_delete_account = $this->connection->class_connection->prepare("DELETE FROM USERS WHERE ID=:user_id");
         $query_delete_parms = ["user_id" => $user_id];
         $query_delete_account->execute($query_delete_parms);
