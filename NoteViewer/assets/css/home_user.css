@@ -97,6 +97,7 @@ body{
 }
 
 .imagem_usuario_nota{
+    border-radius: 50%;
     width: 64px;
     height: 64px;
     margin: 1.5vw;
