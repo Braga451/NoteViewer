@@ -1,0 +1,110 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'DotGothic16', sans-serif;
+    font-size: 36px;
+}
+
+body{
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(0, 0, 0);
+    display: flex;
+    place-items: center;
+    justify-content: center;
+}
+
+#area_config{
+    border: 1px solid #fff;
+    display: flex;
+    width: 75vw;
+    height: 75vh;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#voltar_deletar input[type="submit"]{
+    width: 10vw;
+    border-radius: 40px;
+    background-color: #359E47;
+    padding: 1%;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
+#voltar_deletar{
+    margin-left: 1vw;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+#area_formulario_principal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#area_formulario_principal input[type="file"]{
+    display: none;
+}
+
+#area_formulario_principal label{
+    position: relative;
+    bottom:40px;
+    left: 45px;
+}
+#area_formulario_principal label:hover{
+    cursor: pointer;
+}
+
+#formulario_itens{
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    justify-content: space-around;
+    border: 1px solid #fff;
+    height: 65%;
+    flex-wrap: wrap;
+}
+
+#formulario_itens input{
+    min-width: 271px;
+    width: 50%;
+    background-color: #359E47;
+    border-radius: 10px;
+}
+#formulario_itens input[type="submit"]{
+    border-radius: 40px;
+}
+
+#sair{
+    display: flex;
+    place-items: flex-end;
+    margin-right: 1vw;
+}
+#sair input[type="submit"]{
+    width: 10vw;
+    border-radius: 40px;
+    background-color: #359E47;
+    padding: 5%;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
+@media only screen and (max-width:1384px){
+    #area_config{
+        width: 100vw;
+        height: 100vh;
+        justify-content: center;
+    }
+    #voltar_deletar input[type="submit"]{
+        width: 50vw;
+    }
+    #voltar_deletar{
+        justify-content:flex-start;
+    }
+    #sair input[type="submit"]{
+        width: 50vw;
+    }
+}

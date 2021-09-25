@@ -1,0 +1,169 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'DotGothic16', sans-serif;
+    font-size: 36px;
+}
+
+body{
+    background-color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: space-around;
+}
+
+#area_procura form{
+    position: relative;
+}
+
+#area_procura input[type="search"]{
+    width: 25vw;
+    border: 1px solid #fff;
+    background-color: #000;
+    border-radius: 40px;
+    color:#359E47;
+    padding: 0.8vw;
+    height: 87px;
+    margin-top: 2vh;
+    background-image: url(../img/search.png);
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-origin: content-box;
+    min-width: 170px;
+}
+
+#area_procura input[type="submit"]{
+    position: absolute;
+    top:50px;
+    width: 30px;
+    height: 30px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    color: transparent;
+}
+
+#area_procura input[type="submit"]:hover{
+    cursor: pointer;
+}
+
+#area_perfil{
+    border: 1px solid #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 40vw;
+}
+
+#informacao_perfil{
+    border-bottom: 1px solid #fff;
+    color: #359E47;
+    display: flex;
+    justify-content: space-between;
+}
+
+#informacao_perfil a{
+    text-decoration: none;
+}
+
+#config{
+    margin-left: 1vw;
+}
+
+#informacoes_basicas{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    place-items: center;
+    padding: 0.5vw;
+}
+
+#informacoes_basicas img{
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+}
+
+.area_nota{
+    color:#359E47;
+    border-bottom: 1px solid #fff;
+    display: flex;
+    place-items: center;
+}
+
+.texto_nota{
+    word-break: break-all;
+    font-size: 0.5em;
+    text-align: justify;
+}
+
+.imagem_usuario_nota{
+    width: 64px;
+    height: 64px;
+    margin: 1.5vw;
+}
+
+.deletar_nota{
+    width: 30px;
+    height: 30px;
+}
+
+.form_deletar_nota{
+    position: relative;
+}
+
+.form_deletar_nota input[type="submit"]{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    background-color: transparent;
+    border: none;
+    color: transparent;
+    cursor: pointer;
+}
+
+#area_adicionar_nota textarea{
+    width: 25vw;
+    height: 25vh;
+    font-size: 0.750em;
+    margin: auto;
+}
+
+#area_adicionar_nota form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#area_adicionar_nota input[type="submit"]{
+    width: 25.2vw;
+    min-width: 390px;
+    background-color: transparent;
+    border-radius: 40px;
+    padding: 3%;
+    margin-top: 3vh;
+    color: #359E47;
+    background-image: url(../img/new_note.png);
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-origin: content-box;
+}
+
+@media only screen and (max-width:1024px){
+    body{
+        flex-direction: column;
+        place-items: center;
+    }
+    #area_procura input{
+        margin-bottom: 1vh;
+    }
+    #area_perfil{
+        width: 100vw;
+    }
+    #area_procura input[type="search"]{
+        width: 75vw;
+    }
+    #area_adicionar_nota form{
+        margin-top: 2vh;
+    }
+}

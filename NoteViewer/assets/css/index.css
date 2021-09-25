@@ -1,0 +1,81 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'DotGothic16', sans-serif;
+    font-size: 36px;
+}
+
+body{
+    background-color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: space-around;
+    place-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+#login_register_area{
+    border: 1px solid #FFFF;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    width: 35vw;
+    height: 50vh;
+    min-height: 214px;
+}
+
+.registro_login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #359E47;
+    border-radius: 40px;
+    min-width: 199px;
+    width: 40%;
+    height: 15%;
+    transition: 0.5s;
+}
+
+.registro_login:hover{
+    transform: scale(1.25);
+    transition: 0.5s;
+}
+
+a{
+    text-decoration: none;
+    color: #000;
+}
+
+#img{
+    display: flex;
+    align-items: center;
+    border-right: 1px solid #FFFF;
+    height: 100vh;
+}
+
+#img img{
+    width: 500px;
+    height: 500px;
+}
+
+/*Responsividade*/
+@media only screen and (max-width:1024px){
+    body{
+        flex-direction: column;
+    }
+    #img{
+        border-right: none;
+    }
+    #img img{
+        width: 250px;
+        height: 250px;
+    }
+    #login_register_area{
+        width: 100vw;
+        height: 100vw;
+    }
+    .registro_login{
+        width: 75%;
+    }
+}
