@@ -3,22 +3,26 @@
      $functions = new SiteFunctions();
      if($functions->cookieVerify() == false){
          header("location:index.php");
+          die();
      }
      else{
          if($functions->auth($_COOKIE["token"]) == false){
              if($functions->deAuth()){
                  header("location:index.php");
+                  die();
              }
          }
      }
      if(!isset($_GET["usuario"]) || empty($_GET["usuario"])){
          header("location:home.php");
+          die();
      }
      else{
          $array_user_info = $functions->getUser($_GET["usuario"]);
          if(sizeof($array_user_info) > 0){
              if($array_user_info[1] == $_SESSION["username"]){
                  header("location:home.php");
+                  die();
              }
          }
      }
