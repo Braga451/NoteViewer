@@ -11,7 +11,7 @@
         switch($opcao_form){
             case "VOLTAR":
                 header("location:home.php");
-                die()
+                die();
                 break;
             case "SAIR":
                 $functions->deAuth();
