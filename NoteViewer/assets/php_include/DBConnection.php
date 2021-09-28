@@ -4,7 +4,7 @@
         private $database = "noteviewer";
         private $user = "root";
         private $password = "";
-        public $class_connection;
+        protected $class_connection;
 
         public function __construct(){
             try{
