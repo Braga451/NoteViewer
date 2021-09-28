@@ -4,21 +4,25 @@
     $functions = new SiteFunctions();
     if($functions->cookieVerify() == false){
         header("location:index.php");
+        die();
     }
     if(isset($_POST["opcao"])){
         $opcao_form = $_POST["opcao"];
         switch($opcao_form){
             case "VOLTAR":
                 header("location:home.php");
+                die()
                 break;
             case "SAIR":
                 $functions->deAuth();
                 header("location:index.php");
+                die();
                 break;
             case "DELETAR":
                 $functions->deleteAccount($_SESSION["user_id"]);
                 $functions->deAuth();
                 header("location:index.php");
+                die();
                 break;
             case "ALTERAR":
                 $new_user_name = "";
