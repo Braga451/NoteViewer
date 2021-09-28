@@ -1,12 +1,8 @@
 <?php
 include "DBConnection.php";
-class SiteFunctions{
-    private $connection;
+class SiteFunctions extends DBConnection{
     private $password_salt = "4n_4maz1ng_s4lt";
-    public function __construct(){
-        $this->connection = new DBConnection();
-    }
-
+    
     private function __generateToken(string $user_id): string{
         date_default_timezone_set("America/Sao_Paulo");
         $salt = "Sup3r_s3cr3t_s4lt";
@@ -28,7 +24,7 @@ class SiteFunctions{
         if(strlen($username_input) >= 200 || strlen($user_email) >= 200){
             return false;
         }
-        $select_query = $this->connection->class_connection->prepare("SELECT ID, USERNAME FROM USERS WHERE USERNAME = :username OR EMAIL = :email");
+        $select_query = $this->class_connection->prepare("SELECT ID, USERNAME FROM USERS WHERE USERNAME = :username OR EMAIL = :email");
         $select_query_params = ["username" => $username_input, "email" => $user_email];
         $select_query->execute($select_query_params);
         if($select_query->rowCount() > 0){
@@ -39,15 +35,15 @@ class SiteFunctions{
                 return false;
             }
             else{
-                $insert_query = $this->connection->class_connection->prepare("INSERT INTO USERS VALUES(NULL, :username, :email, :user_password, 'assets/img/default_user.png', NULL)");
+                $insert_query = $this->class_connection->prepare("INSERT INTO USERS VALUES(NULL, :username, :email, :user_password, 'assets/img/default_user.png', NULL)");
                 $insert_query_params = ["username" => $username_input, "email" => $user_email, "user_password" => $user_password];
                 $insert_query->execute($insert_query_params);
-                $get_user_id_query = $this->connection->class_connection->prepare("SELECT ID FROM USERS WHERE USERNAME= :username AND EMAIL= :email");
+                $get_user_id_query = $this->class_connection->prepare("SELECT ID FROM USERS WHERE USERNAME= :username AND EMAIL= :email");
                 $get_user_id_parms = ["username" => $username_input, "email" => $user_email];
                 $get_user_id_query->execute($get_user_id_parms);
                 $user_id = $get_user_id_query->fetchAll()[0][0];
                 $token = $this->__generateToken($user_id);
-                $insert_token_query = $this->connection->class_connection->prepare("UPDATE USERS SET CURRENT_TOKEN = :token WHERE ID= :user_id");
+                $insert_token_query = $this->class_connection->prepare("UPDATE USERS SET CURRENT_TOKEN = :token WHERE ID= :user_id");
                 $insert_token_parms = ["token" => $token, "user_id" => $user_id];
                 $insert_token_query->execute($insert_token_parms);
                 if($this->__setCredentials($token) == false){
@@ -66,7 +62,7 @@ class SiteFunctions{
             return false;
         }
         $token_sanitizate = filter_var($user_token, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $user_id_query = $this->connection->class_connection->prepare("SELECT ID FROM USERS WHERE CURRENT_TOKEN = :token");
+        $user_id_query = $this->class_connection->prepare("SELECT ID FROM USERS WHERE CURRENT_TOKEN = :token");
         $user_id_parms = ["token" => $token_sanitizate];
         $user_id_query->execute($user_id_parms);
         if($user_id_query->rowCount() == 0){
@@ -75,7 +71,7 @@ class SiteFunctions{
         else{
             $user_id = $user_id_query->fetchAll()[0][0];
             $date_published = date("Y/m/d");
-            $insert_note_query = $this->connection->class_connection->prepare("INSERT INTO NOTES VALUES(NULL, :note_string, :data_published, :user_id)");
+            $insert_note_query = $this->class_connection->prepare("INSERT INTO NOTES VALUES(NULL, :note_string, :data_published, :user_id)");
             $insert_note_query_parms = ["note_string" => $note_string, "data_published" => $date_published, "user_id" => $user_id];
             $insert_note_query->execute($insert_note_query_parms);
             return true;
@@ -83,7 +79,7 @@ class SiteFunctions{
     }
 
     public function getNotes(string $user_id): array{
-        $get_notes_query = $this->connection->class_connection->prepare("SELECT ID, CONTENT, DATA_PUBLISHED FROM NOTES WHERE USER_ID= :user_id ");
+        $get_notes_query = $this->class_connection->prepare("SELECT ID, CONTENT, DATA_PUBLISHED FROM NOTES WHERE USER_ID= :user_id ");
         $get_notes_parms = ["user_id" => $user_id];
         $get_notes_query->execute($get_notes_parms);
         if($get_notes_query->rowCount() == 0){
@@ -101,7 +97,7 @@ class SiteFunctions{
         if(strlen($username) >= 200 || strlen($user_password) >= 200){
             return false;
         }
-        $query_login_system = $this->connection->class_connection->prepare("SELECT ID, USERNAME FROM USERS WHERE USER_PASSWORD= :user_password AND USERNAME = :username");
+        $query_login_system = $this->class_connection->prepare("SELECT ID, USERNAME FROM USERS WHERE USER_PASSWORD= :user_password AND USERNAME = :username");
         $query_login_system_parms = ["user_password" => $user_password, "username" => $username];
         $query_login_system->execute($query_login_system_parms);
         if($query_login_system->rowCount() == 0){
@@ -111,7 +107,7 @@ class SiteFunctions{
             $query_results = $query_login_system->fetchAll()[0];
             $user_id = $query_results[0];
             $new_token = $this->__generateToken($user_id);
-            $update_token_query = $this->connection->class_connection->prepare("UPDATE USERS SET CURRENT_TOKEN = :token WHERE ID= :user_id");
+            $update_token_query = $this->class_connection->prepare("UPDATE USERS SET CURRENT_TOKEN = :token WHERE ID= :user_id");
             $update_token_parms = ["token" => $new_token, "user_id" => $user_id];
             $update_token_query->execute($update_token_parms);
             $this->__setCredentials($new_token);
@@ -153,31 +149,31 @@ class SiteFunctions{
         $new_email = filter_var($new_email_input, FILTER_SANITIZE_EMAIL);
         $new_path_img = $new_path_img_input;
         //Test username and email
-        $test_if_user_exists = $this->connection->class_connection->prepare("SELECT * FROM USERS WHERE USERNAME=:username");
+        $test_if_user_exists = $this->class_connection->prepare("SELECT * FROM USERS WHERE USERNAME=:username");
         $test_if_user_exists_parms = ["username"=>$new_username];
         $test_if_user_exists->execute($test_if_user_exists_parms);
-        $test_if_email_exists = $this->connection->class_connection->prepare("SELECT * FROM USERS WHERE EMAIL=:email");
+        $test_if_email_exists = $this->class_connection->prepare("SELECT * FROM USERS WHERE EMAIL=:email");
         $test_if_email_exists_parms = ["email" => $new_email];
         $test_if_email_exists->execute($test_if_email_exists_parms);
         if(strlen($new_username_input) > 0 && strlen($new_username_input) < 200 && $test_if_user_exists->rowCount() == 0){
-            $query_update_username = $this->connection->class_connection->prepare("UPDATE USERS SET USERNAME=:new_username WHERE ID=:user_id");
+            $query_update_username = $this->class_connection->prepare("UPDATE USERS SET USERNAME=:new_username WHERE ID=:user_id");
             $query_update_username_parms = ["new_username" => $new_username, "user_id" => $user_id];
             $query_update_username->execute($query_update_username_parms);
         }
         if(strlen($new_email_input) > 0 && strlen($new_email_input) < 200 
             && $test_if_email_exists->rowCount() == 0 &&filter_var($new_email_input, FILTER_VALIDATE_EMAIL))
         {
-            $query_update_email = $this->connection->class_connection->prepare("UPDATE USERS SET EMAIL=:new_email WHERE ID=:user_id");
+            $query_update_email = $this->class_connection->prepare("UPDATE USERS SET EMAIL=:new_email WHERE ID=:user_id");
             $query_update_email_parms = ["new_email" => $new_email, "user_id" => $user_id];
             $query_update_email->execute($query_update_email_parms);
         }
         if(strlen($new_password_input) > 0 && strlen($new_password_input) < 200){
-            $query_update_password = $this->connection->class_connection->prepare("UPDATE USERS SET USER_PASSWORD=:new_password WHERE ID=:user_id");
+            $query_update_password = $this->class_connection->prepare("UPDATE USERS SET USER_PASSWORD=:new_password WHERE ID=:user_id");
             $query_update_password_parms = ["new_password" => $new_password, "user_id" => $user_id];
             $query_update_password->execute($query_update_password_parms);
         }
         if(strlen($new_path_img) > 0){
-            $query_update_path_img = $this->connection->class_connection->prepare("UPDATE USERS SET PATH_IMG=:new_path_img WHERE ID=:user_id");
+            $query_update_path_img = $this->class_connection->prepare("UPDATE USERS SET PATH_IMG=:new_path_img WHERE ID=:user_id");
             $query_update_path_img_parms = ["new_path_img" => $new_path_img, "user_id" => $user_id];
             $query_update_path_img->execute($query_update_path_img_parms);
         }
@@ -185,10 +181,10 @@ class SiteFunctions{
     }
 
     public function deleteAccount(string $user_id): bool{
-        $query_delete_user_notes = $this->connection->class_connection->prepare("DELETE FROM NOTES WHERE USER_ID=:user_id");
+        $query_delete_user_notes = $this->class_connection->prepare("DELETE FROM NOTES WHERE USER_ID=:user_id");
         $query_delete_user_notes_parms = ["user_id" => $user_id];
         $query_delete_user_notes->execute($query_delete_user_notes_parms);
-        $query_delete_account = $this->connection->class_connection->prepare("DELETE FROM USERS WHERE ID=:user_id");
+        $query_delete_account = $this->class_connection->prepare("DELETE FROM USERS WHERE ID=:user_id");
         $query_delete_parms = ["user_id" => $user_id];
         $query_delete_account->execute($query_delete_parms);
         return true;
@@ -199,7 +195,7 @@ class SiteFunctions{
             return false;
         }
         $token_sanitizate = filter_var($token, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $query_view_token = $this->connection->class_connection->prepare("SELECT ID, USERNAME, PATH_IMG FROM USERS WHERE CURRENT_TOKEN = :token");
+        $query_view_token = $this->class_connection->prepare("SELECT ID, USERNAME, PATH_IMG FROM USERS WHERE CURRENT_TOKEN = :token");
         $query_view_token_params = ["token" => $token_sanitizate];
         $query_view_token->execute($query_view_token_params);
         if($query_view_token->rowCount() == 0){
@@ -234,14 +230,14 @@ class SiteFunctions{
     public function deleteNotes(string $note_id_input, string $user_id_input): bool{
         $note_id = filter_var($note_id_input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $user_id = filter_var($user_id_input, FILTER_SANITIZE_SPECIAL_CHARS);
-        $validate_note_id_request_query = $this->connection->class_connection->prepare("SELECT ID FROM NOTES WHERE ID=:note_id AND USER_ID=:user_id");
+        $validate_note_id_request_query = $this->class_connection->prepare("SELECT ID FROM NOTES WHERE ID=:note_id AND USER_ID=:user_id");
         $validate_note_id_request_query_parms = ["note_id" => $note_id, "user_id" => $user_id];
         $validate_note_id_request_query->execute($validate_note_id_request_query_parms);
         if($validate_note_id_request_query->rowCount() == 0){
             return false;
         }
         else{
-            $delete_note_query = $this->connection->class_connection->prepare("DELETE FROM NOTES WHERE ID = :note_id");
+            $delete_note_query = $this->class_connection->prepare("DELETE FROM NOTES WHERE ID = :note_id");
             $delete_note_query_parms = ["note_id" => $note_id];
             $delete_note_query->execute($delete_note_query_parms);
             return true;
@@ -257,7 +253,7 @@ class SiteFunctions{
 
     public function getUser(string $username_input): array{
         $username = filter_var($username_input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $query_get_user = $this->connection->class_connection->prepare("SELECT ID, USERNAME, PATH_IMG FROM USERS WHERE USERNAME= :username");
+        $query_get_user = $this->class_connection->prepare("SELECT ID, USERNAME, PATH_IMG FROM USERS WHERE USERNAME= :username");
         $query_get_user_params = ["username" => $username];
         $query_get_user->execute($query_get_user_params);
         if($query_get_user->rowCount() == 0){
