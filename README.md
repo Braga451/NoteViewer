@@ -5,5 +5,6 @@ An social network created as my first PHP project. With CRUD, token and authenti
 - PHP
 - HTML
 - CSS
+- MySql
 
 # Some icons used in the project are from <a href="https://icons8.com/license">icons8</a>
