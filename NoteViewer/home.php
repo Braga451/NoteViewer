@@ -3,11 +3,13 @@
     $functions = new SiteFunctions();
     if($functions->cookieVerify() == false){
         header("location:index.php");
+        die();
     }
     else{
         if($functions->auth($_COOKIE["token"]) == false){
             if($functions->deAuth()){
                 header("location:index.php");
+                die();
             }
         }
     }
